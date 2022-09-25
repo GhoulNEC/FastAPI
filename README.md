@@ -116,6 +116,7 @@ uvicorn fast_api:app
   "is_open": true
 }
 ```
+</details>
 
 ***
 <details>
