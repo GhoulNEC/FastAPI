@@ -58,9 +58,9 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Запустить сервер
+Запустить fast_api.py
 ```
-uvicorn fast_api:app
+python3 fast_api.py
 ```
 
 </details>
@@ -97,7 +97,7 @@ uvicorn fast_api:app
     "name": "string"
   },
   "desk_keys": [
-    "string"
+    0
   ]
 }
 ```
@@ -107,15 +107,13 @@ uvicorn fast_api:app
 ```json
 {
   "services": [
-    "string"
+    1
   ],
-  "queue": [
-    "string"
-  ],
-  "in_service": 0,
+  "queue": [],
   "is_open": true
 }
 ```
+</details>
 
 ***
 <details>

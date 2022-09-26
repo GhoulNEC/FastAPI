@@ -1,4 +1,7 @@
-from fastapi import Depends, FastAPI
+import uvicorn
+from fastapi import Depends, FastAPI, Form
+
+from typing import List
 
 from models import Desk, Service
 
@@ -95,7 +98,7 @@ async def open_desk(desk_id: int, database=Depends(get_database)):
 
 
 @app.post("/new_service/")
-async def add_new_service(service: Service, desk_keys: list,
+async def add_new_service(service: Service, desk_keys: List[int],
                           database=Depends(get_database)):
     service_key = database.get_new_service_key()
     database.services[service_key] = service
@@ -109,3 +112,7 @@ async def add_new_desk(desk: Desk, database=Depends(get_database)):
     desk_key = database.get_new_desk_key()
     database.desks[desk_key] = desk
     return {"message": "Касса успешно добавлена"}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
