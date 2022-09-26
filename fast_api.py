@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import Depends, FastAPI, Form
+from fastapi import Depends, FastAPI
 
 from typing import List
 
