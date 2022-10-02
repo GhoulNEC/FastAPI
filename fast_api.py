@@ -32,6 +32,11 @@ def get_desk_place(database, service_id, ticket):
 
 @app.get("/")
 async def root():
+    """
+    Не понятно для чего этот метод
+    Если делаешь заглушку, то тогда можешь выводить какую-то статистику по кол-ву услуг, касс, талончиков
+    чтобы метод нес какую-то пользу
+    """
     return {"message": "Выберите услугу"}
 
 
@@ -48,6 +53,13 @@ async def get_service_info(service_id: int, database=Depends(get_database)):
 
 @app.post("/services/{service_id}/confirm/")
 async def get_in_queue(service_id: int, database=Depends(get_database)):
+    """
+    Название метода совсем не дает понять что он делает.
+    Если мы выдаем талон на услугу то надо так и написать
+    /tickets/new/ а в тело передовать информацию об услуге (и возможно что-то еще)
+
+    не понятно почему талончик только один и как он помещается в очередь
+    """
     try:
         ticket = database.ticket
         service = database.get_service(service_id)
@@ -60,12 +72,15 @@ async def get_in_queue(service_id: int, database=Depends(get_database)):
         return {"message": "Все кассы закрыты"}
     return {"place": ticket.queue_place, "service": ticket.service}
 
-
+#точка входа не по REST
 @app.get("/desk_info/")
 async def get_desk_info(database=Depends(get_database)):
+    """
+    Мне тут не хватает информации о том кто стоит в очередь в эту кассу
+    """
     return database.get_desk_info()
 
-
+#точка входа не по REST
 @app.post("/{desk_id}/done/")
 async def go_to_next_ticket(desk_id: int, database=Depends(get_database)):
     queue = database.get_desk(desk_id).queue
@@ -76,7 +91,7 @@ async def go_to_next_ticket(desk_id: int, database=Depends(get_database)):
         database.get_desk(desk_id).in_service = None
     return {"ticket": database.get_desk(desk_id).in_service}
 
-
+#точка входа не по REST
 @app.post("/{desk_id}/close/}")
 async def close_desk(desk_id: int, database=Depends(get_database)):
     try:
@@ -88,15 +103,16 @@ async def close_desk(desk_id: int, database=Depends(get_database)):
         queue.clear()
     except ValueError:
         return {"message": "Все кассы закрыты"}
+    # тут в сообщении можно добавить какая конкретно касса закрыта 
     return {"message": "Касса закрыта"}
 
-
+#точка входа не по REST
 @app.post("/{desk_id}/open/")
 async def open_desk(desk_id: int, database=Depends(get_database)):
     database.get_desk(desk_id).is_open = True
     return {"message": "Касса открыта"}
 
-
+#точка входа не по REST
 @app.post("/new_service/")
 async def add_new_service(service: Service, desk_keys: List[int],
                           database=Depends(get_database)):
@@ -104,15 +120,18 @@ async def add_new_service(service: Service, desk_keys: List[int],
     database.services[service_key] = service
     for desk_key in desk_keys:
         database.desks[desk_key].services.append(service_key)
+    # тут надо вернуть сам созданный объект, можно и с сообщением об успехе 
     return {"message": "Сервис успешно добавлен"}
 
 
+#точка входа не по REST
 @app.post("/new_desk/")
 async def add_new_desk(desk: Desk, database=Depends(get_database)):
     desk_key = database.get_new_desk_key()
     database.desks[desk_key] = desk
+    # тут надо вернуть сам созданный объект, можно и с сообщением об успехе
     return {"message": "Касса успешно добавлена"}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)

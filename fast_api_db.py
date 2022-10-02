@@ -32,6 +32,7 @@ class Database:
             queue=[],
         )
     }
+    # почему талончик только один?
     ticket = Ticket(
         queue_place=0,
     )
