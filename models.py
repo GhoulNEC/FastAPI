@@ -1,4 +1,5 @@
 from typing import List, Union
+# Хорошо что используешь pydantic 
 from pydantic import BaseModel
 
 
@@ -20,7 +21,13 @@ class Desk(BaseModel):
             }
         }
 
+"""
+Я не поняла назначение этого класса
+Предполагается что мы заказываем талон на услугу, 
+генерируем его номер (в зависимости от услуги) и талон помещаем в очередь конкретной кассы 
 
+Помещать в очередь можно доверить какому-нибудь классу-менеджеру
+"""
 class Ticket(BaseModel):
     queue_place: int
     service: Union[str, None] = None
