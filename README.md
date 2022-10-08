@@ -14,6 +14,8 @@
 * fastapi
 * uvicorn
 
+С полным списком технологий можно ознакомиться в файле ```requirements.txt```
+
 </details>
 
 ***
