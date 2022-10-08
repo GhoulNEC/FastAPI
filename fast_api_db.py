@@ -58,3 +58,12 @@ class Database:
 
     def get_new_desk_key(self):
         return max(list(self.desks.keys())) + 1
+
+    def get_sum_queue_tickets(self):
+        return sum(
+            len(desk.queue) + 1 if desk.in_service is not None
+            else len(desk.queue) for desk in self.desks.values()
+        )
+
+    def get_opened_desks_amount(self):
+        return sum(desk.is_open for desk in self.desks.values())
